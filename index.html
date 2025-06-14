@@ -7,7 +7,16 @@
   <!-- Add Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body { margin: 0; overflow: hidden; background: #000; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      font: normal 75% Arial, Helvetica, sans-serif; /* Merged from particles.js CSS */
+    }
+    canvas {
+      display: block;
+      vertical-align: bottom;
+    }
     #videoContainer {
       position: fixed;
       top: 50%;
@@ -15,7 +24,7 @@
       transform: translate(-50%, -50%);
       width: 640px;
       height: 480px;
-      z-index: 1;
+      z-index: 2;
     }
     #videoElement {
       position: absolute;
@@ -30,7 +39,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 2;
+      z-index: 3;
       transform: scale(3);
       transform-origin: center center;
     }
@@ -41,7 +50,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      z-index: 3;
+      z-index: 5;
     }
     .music-buttons {
       display: flex;
@@ -96,7 +105,7 @@
       right: 20px;
       display: flex;
       gap: 10px;
-      z-index: 3;
+      z-index: 5;
     }
     #cameraSelect {
       padding: 10px;
@@ -150,7 +159,7 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      z-index: 4;
+      z-index: 5;
       animation: rainbow 20s linear infinite;
     }
     .loader:before,
@@ -195,6 +204,15 @@
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+
+    .bottom-right-logo {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 12.5%;
+      height: auto;
+      z-index: 5;
     }
 
     .song-list {
@@ -253,6 +271,51 @@
     .file-upload label:hover {
       background: rgba(255, 255, 255, 0.1);
     }
+    /* ---- particles.js container ---- */
+    #particles-js{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      background-image: none;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50% 50%;
+      z-index: 4;
+    }
+    /* ---- stats.js ---- */
+    .count-particles{
+      background: #000022;
+      position: absolute;
+      top: 48px;
+      left: 0;
+      width: 80px;
+      color: #13E8E9;
+      font-size: .8em;
+      text-align: left;
+      text-indent: 4px;
+      line-height: 14px;
+      padding-bottom: 2px;
+      font-family: Helvetica, Arial, sans-serif;
+      font-weight: bold;
+    }
+    .js-count-particles{
+      font-size: 1.1em;
+    }
+    #stats, .count-particles{
+      -webkit-user-select: none;
+      margin-top: 5px;
+      margin-left: 5px;
+    }
+    #stats{
+      border-radius: 3px 3px 0 0;
+      overflow: hidden;
+    }
+    .count-particles{
+      border-radius: 0 0 3px 3px;
+    }
   </style>
   <!-- MediaPipe dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
@@ -261,6 +324,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
 </head>
 <body>
+  <div id="particles-js"></div> <!-- particles.js container -->
   <div class="loader"></div>
   <div id="videoContainer">
     <video id="videoElement" autoplay playsinline></video>
@@ -289,6 +353,138 @@
     </select>
     <button id="startCameraButton">Start Camera</button>
   </div>
+  <img src="images/twlogo.png" alt="Logo" class="bottom-right-logo">
+  <!-- particles.js lib --> <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          },
+          "polygon": {
+            "nb_sides": 5
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": false,
+          "anim": {
+            "enable": false,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": {
+            "enable": false,
+            "speed": 40,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ffffff",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 6,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": false,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "repulse"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 400,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    });
+
+    var count_particles, stats, update;
+
+    stats = new Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(stats.domElement);
+
+    count_particles = document.querySelector('.js-count-particles');
+
+    update = function() {
+      stats.begin();
+      stats.end();
+      if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+        count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+      }
+      requestAnimationFrame(update);
+    };
+
+    requestAnimationFrame(update);
+  </script>
   <script type="module" src="main.js"></script>
 </body>
 </html>
